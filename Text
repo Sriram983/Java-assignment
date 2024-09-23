@@ -1,0 +1,58 @@
+class Encryption {
+    private final String input;
+    private final int key;
+
+    public Encryption(String input, int key) {
+        this.input = input;
+        this.key = key;
+    }
+
+    public static int getCharValue(char ch) {
+        if (Character.isLowerCase(ch)) {
+            return ch - 'a';
+        } else if (Character.isUpperCase(ch)) {
+            return ch - 'A';
+        }
+        return -1;
+    }
+
+    public static char getEncryptedChar(char ch, int key) {
+        int charValue = getCharValue(ch);
+        if (charValue == -1) {
+            return ch;
+        }
+
+        int encryptedValue = (charValue + key) % 26;
+        char encryptedChar;
+
+        if (Character.isLowerCase(ch)) {
+            encryptedChar = (char) (encryptedValue + 'A');
+        } else {
+            encryptedChar = (char) (encryptedValue + 'a');
+        }
+
+        return encryptedChar;
+    }
+
+    public String encryptString() {
+        StringBuilder encryptedString = new StringBuilder();
+
+        for (char ch : input.toCharArray()) {
+            encryptedString.append(getEncryptedChar(ch, key));
+        }
+
+        return encryptedString.toString();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        String input1 = "Wipro Tech";
+        int input2 = 20;
+
+        Encryption encryption = new Encryption(input1, input2);
+        String encryptedString = encryption.encryptString();
+
+        System.out.println("Encrypted words: " + encryptedString);
+    }
+}
