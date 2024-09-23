@@ -1,0 +1,64 @@
+import java.util.*;
+
+class TextJustification {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+        int index = 0;
+        
+        while (index < words.length) {
+            int totalChars = words[index].length();
+            int last = index + 1;
+            
+            while (last < words.length) {
+                if (totalChars + words[last].length() + 1 > maxWidth) break;
+                totalChars += words[last].length() + 1;
+                last++;
+            }
+            
+            StringBuilder sb = new StringBuilder();
+            int wordCount = last - index;
+            int spaces = maxWidth - totalChars;
+            
+            if (last == words.length || wordCount == 1) {
+                for (int i = index; i < last; i++) {
+                    sb.append(words[i]);
+                    if (i != last - 1) sb.append(" ");
+                }
+                
+                for (int i = sb.length(); i < maxWidth; i++) {
+                    sb.append(" ");
+                }
+            } else {
+                int spaceBetweenWords = spaces / (wordCount - 1);
+                int extraSpaces = spaces % (wordCount - 1);
+                
+                for (int i = index; i < last; i++) {
+                    sb.append(words[i]);
+                    if (i != last - 1) {
+                        for (int j = 0; j <= spaceBetweenWords + (i - index < extraSpaces ? 1 : 0); j++) {
+                            sb.append(" ");
+                        }
+                    }
+                }
+            }
+            
+            result.add(sb.toString());
+            index = last;
+        }
+        
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TextJustification tj = new TextJustification();
+        
+        String[] words = {"This", "is", "an", "example", "of", "text", "justification."};
+        int maxWidth = 16;
+        
+        List<String> result = tj.fullJustify(words, maxWidth);
+        
+        for (String line : result) {
+            System.out.println("\"" + line + "\"");
+        }
+    }
+}
